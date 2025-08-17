@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import emailjs from "@emailjs/browser";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const form = useRef();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,10 +18,35 @@ const ContactForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Здесь можно добавить логику отправки формы
+    setIsSubmitting(true);
+
+    emailjs
+      .sendForm(
+        "service_j9avshn",       // Service ID
+        "template_hvqoxxg",      // Template ID
+        form.current,
+        "Q2LC8qfk3QmYU8PaY"      // Public Key
+      )
+      .then(
+        () => {
+          alert("Сообщение успешно отправлено!");
+          form.current.reset();
+          setFormData({
+            name: '',
+            email: '',
+            message: ''
+          });
+        },
+        (error) => {
+          console.error("Ошибка:", error);
+          alert("Ошибка при отправке!");
+        }
+      )
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -29,39 +56,23 @@ const ContactForm = () => {
           Contact me
         </h2>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Fields */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-black mb-2">
-                First name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder="Jane"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-black mb-2">
-                Last name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                placeholder="Smitherton"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                required
-              />
-            </div>
+        <form ref={form} onSubmit={sendEmail} className="space-y-6">
+          {/* Name Field */}
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-black mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Your name"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              required
+              disabled={isSubmitting}
+            />
           </div>
 
           {/* Email Field */}
@@ -75,9 +86,10 @@ const ContactForm = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="email@janesfakedomain.net"
+              placeholder="email@example.com"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -95,15 +107,21 @@ const ContactForm = () => {
               rows="5"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent resize-none"
               required
+              disabled={isSubmitting}
             />
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-black text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors font-medium"
+            disabled={isSubmitting}
+            className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
+              isSubmitting 
+                ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+                : 'bg-black text-white hover:bg-gray-800'
+            }`}
           >
-            Submit
+            {isSubmitting ? 'Отправка...' : 'Submit'}
           </button>
         </form>
       </div>
