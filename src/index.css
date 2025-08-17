@@ -14,3 +14,20 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.page-hidden {
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.page-visible {
+  opacity: 1;
+  transition: opacity 1.5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-hidden,
+  .page-visible {
+    transition: none;
+  }
+}
