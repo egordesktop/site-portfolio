@@ -3,7 +3,7 @@ import React from 'react';
 const AboutSection = () => {
   return (
     <section className="py-16 lg:py-24">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
         {/* Left Column - Text Content */}
         <div className="space-y-6">
           <h2 className="text-4xl lg:text-5xl font-bold text-black leading-tight">
@@ -24,13 +24,11 @@ const AboutSection = () => {
 
         {/* Right Column - Image */}
         <div className="flex justify-center lg:justify-end">
-          <div className="w-full max-w-md">
-            <img
-              src="/luzhenina-portrait-bio.jpg"
-              alt="Portrait of Luzhenina"
-              className="w-full h-auto rounded-xl object-cover aspect-[3/4]"
-            />
-          </div>
+          <img
+            src="/luzhenina-portrait-bio.jpg"
+            alt="Portrait of Luzhenina"
+            className="max-w-sm w-full rounded-lg object-cover"
+          />
         </div>
       </div>
     </section>

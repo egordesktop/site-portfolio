@@ -3,7 +3,8 @@ import emailjs from "@emailjs/browser";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     message: ''
   });
@@ -34,7 +35,8 @@ const ContactForm = () => {
           alert("Сообщение успешно отправлено!");
           form.current.reset();
           setFormData({
-            name: '',
+            firstName: '',
+            lastName: '',
             email: '',
             message: ''
           });
@@ -51,28 +53,47 @@ const ContactForm = () => {
 
   return (
     <section className="py-16 lg:py-24">
-      <div className="max-w-2xl">
+      <div className="w-full max-w-md px-4 sm:px-0">
         <h2 className="text-3xl lg:text-4xl font-bold text-black mb-8">
           Contact me
         </h2>
         
         <form ref={form} onSubmit={sendEmail} className="space-y-6">
-          {/* Name Field */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-black mb-2">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Your name"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              required
-              disabled={isSubmitting}
-            />
+          {/* Name Fields - First and Last name on same row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-black mb-2">
+                First name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="Jane"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                required
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-black mb-2">
+                Last name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Smitherton"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                required
+                disabled={isSubmitting}
+              />
+            </div>
           </div>
 
           {/* Email Field */}
@@ -86,7 +107,7 @@ const ContactForm = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="email@example.com"
+              placeholder="email@janesfakedomain.net"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
               required
               disabled={isSubmitting}
